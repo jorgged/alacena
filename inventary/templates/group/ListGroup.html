@@ -1,7 +1,19 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="profile-container">
 {% for group in groups %}
-    {{group.name}}
+    <div class="profile-card">
+        <div class="profile-name">{{group.name}}</div>
+        <div class="profile-position">Ultima modificacion: {{group.last_modified}}</div>
+        <div class="profile-position">Creado: {{group.created}}</div>
+        <a href="{% url 'inventary:UpdateGroup' group.id %}" class="button">Editar</a>
+    </div>
 {% endfor %}
+</div>
+
+
+
+
+<a href="{% url 'inventary:CreateGroup' %}" class="btn">Crear</a>
 {% endblock content %}

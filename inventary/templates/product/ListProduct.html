@@ -1,7 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% for product in products %}
-    {{product.name}}
-{% endfor %}
+<table>
+    <tr>
+        <th>Nombre</th>
+        <th>Grupo</th>
+        <th>Cantida</th>
+        <th>Acciones</th>
+    </tr>
+    
+    {% for product in products %}
+    <tr>
+        <td>{{product.name}}</td>
+        <td>{{product.group}}</td>
+        <td>{{product.quantity}}</td>
+        <td>
+            <a href="{% url 'inventary:UpdateProduct' product.id %}">Editar</a>
+            <a href="{% url 'inventary:UpdateProduct' product.id %}">Carrito</a>
+        </td>
+    </tr>
+    {% endfor %}
+
+    
+</table>
+
+
+
+
+
+<a href="{% url 'inventary:CreateProduct' %}" class="btn">Crear</a>
 {% endblock content %}
