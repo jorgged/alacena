@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<ul>
+    
+    {% for item in items %}
+        <li><span> {{item.Product}} </span><a href="#" pk="{{item.id}}" class="btn delete">Quitar</a></li>
+    {% endfor %}
+</ul>
+{% endblock content %}

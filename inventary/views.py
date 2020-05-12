@@ -1,5 +1,6 @@
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView
 from django.urls import reverse_lazy
+from django.http import HttpResponse, HttpResponseBadRequest
 from .models import ProductModel, GroupProductModel, ShoppingCartModel
 from .forms import ProductForm, GroupProductForm
 
@@ -30,7 +31,7 @@ class ProductUpdateView(UpdateView):
 
     def get_success_url(self):
         product_id = self.kwargs['pk']
-        return reverse_lazy('inventary:DetailProduct',kwargs={'pk': product_id})
+        return reverse_lazy('inventary:DetailProduct', kwargs={'pk': product_id})
 
 
 class GroupCreateView(CreateView):
@@ -56,29 +57,42 @@ class GroupListView(ListView):
     template_name = "group/ListGroup.html"
 
 
-
 class GroupDetailView(DetailView):
     model = GroupProductModel
-    context_object_name="group"
+    context_object_name = "group"
     template_name = "group/DetailGroup.html"
 
 
 class ShoppingCartListView(ListView):
     model = ShoppingCartModel
-    context_object_name="products"
-    template_name = "shoppingcart/ListShopping.html"
+    context_object_name = "items"
+    template_name = "shoppingcart/ShoppingCart.html"
+    
 
-class ShoppingCartCreateView(CreateView):
-    model = ShoppingCartModel
-    template_name = "shoppingcart/CreateShopping.html"
-    success_url = reverse_lazy('inventary:ListShopping')
+def AddToShoppingCart(request, pk):
+    product_id = pk
+    if product_id is not '':
+        try:
+            product = ProductModel.objects.get(pk=product_id)
+        except ProductModel.DoesNotExist:
+            return HttpResponseBadRequest(content="el producto no existe")
+        ShoppingCart = ShoppingCartModel()
+        ShoppingCart.Product = product
+        ShoppingCart.Check = False
+        ShoppingCart.save()
+        HttpResponse(status=201)
+    else:
+        return HttpResponseBadRequest('no se pudo agregar al carrito')
 
-
-
-def ShoppingCartView(request, pk):
-    if pk is not None:
-        product = ProductModel.objects.get(id=pk)
-        product.InList = True
-        product.save()
-        return HttpResponse("ok")
-    return HttpResponseBadRequest("bad")
+def QuitToShoppingCart(request, pk):
+    item_id = pk
+    if item_id is not '':
+        # import ipdb; ipdb.set_trace()
+        try:
+            item = ShoppingCartModel.objects.get(pk=item_id)
+        except ShoppingCartModel.DoesNotExist:
+            return HttpResponseBadRequest(content="el item seleccionado no existe")
+        item.delete()
+        return HttpResponse(status=201)
+    else:
+        return HttpResponseBadRequest(content="ocurrio un error en quitar el item del carrito")

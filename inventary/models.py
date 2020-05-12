@@ -16,6 +16,7 @@ class ProductModel(models.Model):
     quantity = models.IntegerField()
     last_modified = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
+    # inlist = models.BooleanField(default=False) #posiblemente lo hiba a usar para ajax
 
     def __str__(self):
         return self.name
@@ -24,4 +25,3 @@ class ProductModel(models.Model):
 class ShoppingCartModel(models.Model):
     Product = models.ForeignKey(ProductModel, on_delete=models.CASCADE)
     Check = models.BooleanField(default=True)
-

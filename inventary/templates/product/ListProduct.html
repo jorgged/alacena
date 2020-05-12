@@ -16,7 +16,7 @@
         <td>{{product.quantity}}</td>
         <td>
             <a href="{% url 'inventary:UpdateProduct' product.id %}">Editar</a>
-            <a href="{% url 'inventary:UpdateProduct' product.id %}">Carrito</a>
+            <a href="#" pk="{{product.id}}" class="add" prop="hola">Carrito</a>
         </td>
     </tr>
     {% endfor %}
